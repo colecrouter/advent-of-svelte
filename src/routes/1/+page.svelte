@@ -39,7 +39,7 @@
         </tr>
     </thead>
     <tbody bind:this={tbody}>
-        {#each data.people.filter((i) => i.name.search(filter) !== -1) as item, i}
+        {#each data.people.filter((i) => i.name.search(new RegExp(filter, 'i')) !== -1) as item, i}
             <tr class:bg-danger={item.tally < 0}>
                 <td><input class="form-control" type="text" bind:value={item.name} /></td>
                 <td><input class="form-control" type="number" bind:value={item.tally} /></td>
@@ -92,12 +92,6 @@
     td,
     th {
         background-color: transparent !important;
-    }
-
-    thead,
-    tfoot {
-        /* Compensate for scrollbar on body */
-        /* width: calc(100% - 1em) !important; */
     }
 
     thead,
