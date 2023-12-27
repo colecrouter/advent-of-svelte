@@ -40,7 +40,28 @@
 
 <h2 class="display-1">{heartRate ?? ''}</h2>
 
-<Chart data={history.map(([, value]) => value)} labels={history.map(([label]) => label)} />
+<Chart
+    data={{ data: history.map(([, value]) => value), label: 'BPM' }}
+    chartType="line"
+    labels={history.map(([label]) => label)}
+    options={{
+        color: '#fff',
+        borderColor: '#fff',
+        scales: {
+            y: {
+                min: 60,
+                max: 100,
+                grid: {
+                    color: '#fff5',
+                },
+            },
+            x: {
+                grid: {
+                    color: '#fff5',
+                },
+            },
+        },
+    }} />
 
 <style>
     span {

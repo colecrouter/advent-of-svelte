@@ -12,6 +12,7 @@
     .card {
         width: 600px;
         max-width: 600px;
+        margin: 32px;
     }
 
     .container {

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import type { ChartDataset } from 'chart.js/auto';
     import { onMount } from 'svelte';
 
     let ctx: CanvasRenderingContext2D | null;
@@ -6,46 +7,30 @@
     let canvas: HTMLCanvasElement;
 
     export let labels: string[] = [];
-    export let data: number[] = [];
+    export let chartType: import('chart.js').ChartType;
+    export let data: ChartDataset<typeof chartType>;
+    export let options: import('chart.js').ChartOptions;
 
     onMount(async () => {
-        const { Chart, LineController, LineElement, CategoryScale, LinearScale, PointElement } = await import('chart.js');
-        Chart.register(LineElement, LineController, CategoryScale, LinearScale, PointElement);
+        const { Chart } = await import('chart.js/auto');
 
         ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        chart = new Chart(ctx, {
-            type: 'line',
+        chart = new Chart<typeof chartType>(ctx, {
+            type: chartType,
             data: {
                 labels,
-                datasets: [{ label: 'My First Dataset', data }],
+                datasets: [data],
             },
-            options: {
-                color: '#fff',
-                borderColor: '#fff',
-                scales: {
-                    y: {
-                        min: 60,
-                        max: 100,
-                        grid: {
-                            color: '#fff5',
-                        },
-                    },
-                    x: {
-                        grid: {
-                            color: '#fff5',
-                        },
-                    },
-                },
-            },
+            options,
         });
     });
 
     $: {
         if (chart) {
             chart.data.labels = labels;
-            chart.data.datasets[0].data = data;
+            chart.data = { ...chart.data };
             chart.update();
         }
     }
